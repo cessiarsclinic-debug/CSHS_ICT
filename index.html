@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cabiao Senior High School Clinic Health Information System</title>
+<style>
+:root{--bg:#eef2ea;--surface:#fff;--ink:#1d2a1f;--muted:#5c6b5e;--line:#d5dccf;--green:#4a6b43;--green-d:#364f31;--warn:#b45309;--warn-bg:#fdf0dc;--bad:#b42318;--bad-bg:#fde8e6;--ok-bg:#e3efdf;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b15;--surface:#1d261e;--ink:#e8efe6;--muted:#9fb0a0;--line:#2f3d30;--green:#7fa876;--green-d:#2f4a2a;--warn:#f0b35a;--warn-bg:#3a2d14;--bad:#f28b82;--bad-bg:#3d1d1a;--ok-bg:#223523;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141b15;--surface:#1d261e;--ink:#e8efe6;--muted:#9fb0a0;--line:#2f3d30;--green:#7fa876;--green-d:#2f4a2a;--warn:#f0b35a;--warn-bg:#3a2d14;--bad:#f28b82;--bad-bg:#3d1d1a;--ok-bg:#223523;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.hidden{display:none!important}
+/* login */
+#login{min-height:100vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:linear-gradient(120deg,var(--green-d),var(--green))}
+.welcome{padding:48px;color:#fff;align-self:center}
+.welcome h2{font-size:44px;font-style:italic;font-weight:400}
+.welcome p{max-width:280px;opacity:.9}
+.card{background:var(--surface);margin:24px;border-radius:28px;padding:36px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.logo{width:120px;height:120px;border-radius:50%;object-fit:cover;background:#fff;margin-bottom:12px}
+.card .school{font-size:13px;letter-spacing:.04em;color:var(--muted);font-weight:600}
+.card h1{font-size:34px;line-height:1.05;color:var(--green-d);font-weight:800;margin:4px 0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .card h1{color:var(--green)}}
+.card .sub{font-weight:700;color:var(--green-d);margin-bottom:18px}
+.field{width:100%;max-width:340px;text-align:left;margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.field input,.field select,.field textarea,.search{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.pw{position:relative}.pw button{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:none;cursor:pointer;color:var(--muted);padding:6px}
+.btn{border:0;border-radius:999px;background:var(--green-d);color:#fff;padding:11px 22px;font-weight:700;cursor:pointer}
+.btn.wide{width:100%;max-width:340px;padding:13px}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:6px 12px;font-size:13px}
+.btn.danger{background:var(--bad-bg);color:var(--bad)}
+.err{color:var(--bad);font-size:13px;min-height:20px;margin:4px 0}
+.hint{font-size:12px;color:var(--muted);margin-top:10px}
+@media(max-width:760px){#login{grid-template-columns:1fr}.welcome{padding:28px 28px 0}.welcome h2{font-size:34px}}
+/* app */
+header.top{background:var(--green-d);color:#fff;display:flex;align-items:center;gap:14px;padding:12px 20px;flex-wrap:wrap}
+header.top b{font-family:Georgia,serif;font-size:18px;flex:1;min-width:200px}
+nav{display:flex;gap:6px}
+nav button{background:transparent;border:0;color:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;opacity:.8}
+nav button.on{background:rgba(255,255,255,.18);opacity:1;font-weight:700}
+main{max-width:1060px;margin:0 auto;padding:22px 18px 60px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.stat b{display:block;font-family:Georgia,serif;font-size:32px}
+.stat span{color:var(--muted);font-size:13px}
+.bar{display:flex;gap:10px;align-items:center;margin:14px 0;flex-wrap:wrap}
+.bar h2{flex:1;font-size:24px}.search{max-width:260px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.grid .field{max-width:none;margin:0}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:13px;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--ok-bg);color:var(--green)}
+.tag.low{background:var(--warn-bg);color:var(--warn)}.tag.out{background:var(--bad-bg);color:var(--bad)}
+.qty{display:inline-flex;align-items:center;gap:6px}
+.qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--bg);cursor:pointer}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.detail dl{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;margin:12px 0}
+.detail dt{color:var(--muted)}.detail dd{margin:0}
+.sheetT{min-width:1300px}.sheetT th,.sheetT td{border:1px solid var(--line);white-space:nowrap;font-size:14px;padding:8px 12px}.sheetT th{background:var(--ok-bg);color:var(--ink)}.sheetT .rn{background:var(--ok-bg);color:var(--muted);text-align:center}
+.sf{max-width:760px;margin:0 auto;padding:28px 18px 60px}.sf h2{font-size:28px;color:var(--green-d)}.sf .panel p{color:var(--muted)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sf h2{color:var(--green)}}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--green-d);color:#fff;padding:10px 18px;border-radius:999px;z-index:20}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <div class="welcome">
+    <h2>Welcome!</h2>
+    <p>Please log in to access the clinic health information system.</p>
+  </div>
+  <div class="card">
+    <img class="logo" src="LOGO_DATA_URI_DITO" alt="Cabiao Senior High School logo">
+    <div class="school">CABIAO SENIOR HIGH SCHOOL</div>
+    <h1>CLINIC HEALTH</h1>
+    <div class="sub">INFORMATION SYSTEM</div>
+    <div class="field"><label for="u">USERNAME</label><input id="u" autocomplete="username" placeholder="Enter your username"></div>
+    <div class="field"><label for="p">PASSWORD</label>
+      <div class="pw"><input id="p" type="password" autocomplete="current-password" placeholder="Enter your password"><button type="button" id="eye" aria-label="Show password">Show</button></div>
+    </div>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn wide" id="go">LOGIN</button>
+    <button class="btn alt wide" id="tostu" style="margin-top:12px">Student? Fill in your health form</button>
+    <div class="hint">Clinic staff login only for the system.</div>
+  </div>
+</section>
+
+<section id="app" class="hidden">
+  <header class="top">
+    <b>CSHS Clinic Health Information System</b>
+    <nav>
+      <button data-v="dash" class="on">Dashboard</button>
+      <button data-v="meds">Medicine stock</button>
+      <button data-v="stu">Student profiles</button>
+    </nav>
+    <span id="sync" style="font-size:12px;opacity:.85"></span><button class="btn alt sm" id="out" style="color:#fff;border-color:rgba(255,255,255,.4)">Log out</button>
+  </header>
+  <main id="view"></main>
+</section>
+<section id="sform" class="hidden"><div class="sf">
+  <img class="logo" id="slogo" alt="" style="width:80px;height:80px">
+  <h2>Student Health Information Form</h2>
+  <p style="color:var(--muted)">Cabiao Senior High School Clinic. Fill in your details. Only the school clinic will use this information.</p>
+  <div class="panel" id="sfbody"><div class="grid">
+   <div class="field"><label>Full name *</label><input id="fn"></div>
+   <div class="field"><label>LRN *</label><input id="fl" inputmode="numeric"></div>
+   <div class="field"><label>Grade &amp; section</label><input id="fs"></div>
+   <div class="field"><label>Age</label><input id="fa" type="number" min="10" max="30"></div>
+   <div class="field"><label>Sex</label><select id="fx"><option>Female</option><option>Male</option></select></div>
+   <div class="field"><label>Blood type</label><select id="fb"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+   <div class="field"><label>Height (cm)</label><input id="fh" type="number"></div>
+   <div class="field"><label>Weight (kg)</label><input id="fw" type="number"></div>
+   <div class="field"><label>Allergies</label><input id="fal" placeholder="None, or list them"></div>
+   <div class="field"><label>Medical conditions</label><input id="fc" placeholder="None, or list them"></div>
+   <div class="field"><label>Emergency contact person</label><input id="fe"></div>
+   <div class="field"><label>Contact number</label><input id="fp" type="tel"></div>
+   <div class="field" style="grid-column:1/-1"><label>Notes</label><textarea id="fno" rows="2"></textarea></div></div>
+   <p><button class="btn" id="fsend">Submit</button> <button class="btn alt" id="fback">Back to login</button></p></div>
+  <div class="panel hidden" id="sfthanks"><h3>Thank you!</h3><p>Your health information was submitted to the clinic.</p><button class="btn" id="fmore">Submit for another student</button></div>
+</div></section>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function toast(m){var t=$("#toast");t.textContent=m;t.classList.remove("hidden");setTimeout(function(){t.classList.add("hidden")},2400)}
+var meds=[],stu=[],cur="dash",q="",showForm=false,detailId=null;
+var COLS=[["name","Name"],["lrn","LRN"],["sec","Grade & section"],["age","Age"],["sex","Sex"],["blood","Blood type"],["h","Height (cm)"],["w","Weight (kg)"],["all","Allergies"],["cond","Medical conditions"],["ec","Emergency contact"],["cn","Contact number"],["notes","Notes"]];
+function api(path,opt){opt=opt||{};opt.credentials="same-origin";opt.headers={"Content-Type":"application/json"};if(opt.body&&typeof opt.body!=="string")opt.body=JSON.stringify(opt.body);
+ return fetch("/api"+path,opt).then(function(r){return r.json().catch(function(){return null}).then(function(d){if(r.status===401&&path!=="/login"&&path!=="/me")leave();if(!r.ok)throw new Error((d&&d.error)||"Request failed");return d})})}
+function reload(){return Promise.all([api("/medicines"),api("/students")]).then(function(a){meds=a[0];stu=a[1];render()}).catch(function(e){toast(e.message)})}
+function login(){api("/login",{method:"POST",body:{username:$("#u").value.trim(),password:$("#p").value}}).then(function(){$("#err").textContent="";enter()}).catch(function(e){$("#err").textContent=e.message})}
+function enter(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#sync").textContent="Connected to cloud database";reload()}
+function leave(){api("/logout",{method:"POST"}).catch(function(){});$("#app").classList.add("hidden");$("#login").classList.remove("hidden");$("#p").value=""}
+$("#go").onclick=login;
+$("#p").onkeydown=$("#u").onkeydown=function(e){if(e.key==="Enter")login()};
+$("#eye").onclick=function(){var p=$("#p"),s=p.type==="password";p.type=s?"text":"password";this.textContent=s?"Hide":"Show"};
+$("#out").onclick=leave;
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){cur=b.dataset.v;q="";showForm=false;detailId=null;document.querySelectorAll("nav button").forEach(function(x){x.classList.toggle("on",x===b)});render()}});
+function status(m){if(m.qty<=0)return'<span class="tag out">Out of stock</span>';if(m.qty<=m.min)return'<span class="tag low">Low stock</span>';return'<span class="tag">In stock</span>'}
+function expSoon(m){return m.exp&&(new Date(m.exp)-new Date())/864e5<=90}
+function fmt(d){if(!d)return"-";var x=new Date(d);return isNaN(x)?d:x.toLocaleDateString("en-PH",{year:"numeric",month:"short",day:"numeric"})}
+function rec(px){var g=function(i){var e=$("#"+px+i);return e?e.value.trim():""};return{name:g("n"),lrn:g("l"),sec:g("s"),age:g("a"),sex:g("x"),blood:g("b"),h:g("h"),w:g("w"),all:g("al"),cond:g("c"),ec:g("e"),cn:g("p"),notes:g("no")}}
+function search(){$("#q").oninput=function(){q=this.value;var p=this.selectionStart;render();var n=$("#q");n.focus();n.setSelectionRange(p,p)};$("#add").onclick=function(){showForm=!showForm;render()}}
+
+function render(){
+ var v=$("#view");
+ if(cur==="dash"){
+  var low=meds.filter(function(m){return m.qty>0&&m.qty<=m.min}).length,out=meds.filter(function(m){return m.qty<=0}).length,ex=meds.filter(expSoon).length;
+  var alerts=meds.filter(function(m){return m.qty<=m.min||expSoon(m)});
+  v.innerHTML='<div class="bar"><h2>Dashboard</h2></div><div class="stats">'+
+   '<div class="stat"><b>'+meds.length+'</b><span>Medicines listed</span></div><div class="stat"><b>'+low+'</b><span>Low stock</span></div><div class="stat"><b>'+out+'</b><span>Out of stock</span></div><div class="stat"><b>'+ex+'</b><span>Expiring within 90 days</span></div><div class="stat"><b>'+stu.length+'</b><span>Student health profiles</span></div></div>'+
+   '<h3 style="margin-bottom:10px">Needs attention</h3>'+
+   (alerts.length?'<div class="scroll"><table><tr><th>Medicine</th><th>Stock</th><th>Status</th><th>Expiry</th></tr>'+alerts.map(function(m){return'<tr><td>'+esc(m.name)+'</td><td>'+m.qty+'</td><td>'+status(m)+'</td><td>'+fmt(m.exp)+(expSoon(m)?' <span class="tag low">Expiring</span>':'')+'</td></tr>'}).join("")+'</table></div>':'<div class="panel empty">All medicines are sufficiently stocked.</div>');
+ }
+ if(cur==="meds"){
+  var list=meds.filter(function(m){return m.name.toLowerCase().indexOf(q.toLowerCase())>-1});
+  v.innerHTML='<div class="bar"><h2>Medicine stock</h2><input class="search" id="q" placeholder="Search medicine" value="'+esc(q)+'"><button class="btn" id="add">'+(showForm?"Close":"Add medicine")+'</button></div>'+
+  (showForm?'<div class="panel"><div class="grid"><div class="field"><label>Medicine name</label><input id="mn"></div><div class="field"><label>Form (tablet, syrup...)</label><input id="mc"></div><div class="field"><label>Quantity</label><input id="mq" type="number" min="0" value="0"></div><div class="field"><label>Low-stock level</label><input id="mm" type="number" min="0" value="10"></div><div class="field"><label>Expiry date</label><input id="me" type="date"></div></div><p><button class="btn" id="msave">Save medicine</button></p></div>':'')+
+  (list.length?'<div class="scroll"><table><tr><th>Medicine</th><th>Form</th><th>Quantity</th><th>Status</th><th>Expiry</th><th></th></tr>'+list.map(function(m){return'<tr><td>'+esc(m.name)+'</td><td>'+esc(m.cat)+'</td><td><span class="qty"><button data-d="-1" data-id="'+m.id+'" aria-label="Decrease">-</button><b>'+m.qty+'</b><button data-d="1" data-id="'+m.id+'" aria-label="Increase">+</button></span></td><td>'+status(m)+'</td><td>'+fmt(m.exp)+(expSoon(m)?' <span class="tag low">Expiring</span>':'')+'</td><td><button class="btn sm danger" data-del="'+m.id+'">Delete</button></td></tr>'}).join("")+'</table></div>':'<div class="panel empty">No medicines found. Click \u201cAdd medicine\u201d to get started.</div>');
+  search();
+  if(showForm)$("#msave").onclick=function(){var n=$("#mn").value.trim();if(!n){toast("Enter the medicine name");return}
+   api("/medicines",{method:"POST",body:{name:n,cat:$("#mc").value,qty:$("#mq").value,min:$("#mm").value,exp:$("#me").value}}).then(function(){showForm=false;toast("Medicine saved");return reload()}).catch(function(e){toast(e.message)})};
+  v.querySelectorAll("[data-d]").forEach(function(b){b.onclick=function(){api("/medicines/"+b.dataset.id,{method:"PATCH",body:{delta:+b.dataset.d}}).then(reload).catch(function(e){toast(e.message)})}});
+  v.querySelectorAll("[data-del]").forEach(function(b){b.onclick=function(){if(confirm("Delete this medicine?"))api("/medicines/"+b.dataset.del,{method:"DELETE"}).then(reload).catch(function(e){toast(e.message)})}});
+ }
+ if(cur==="stu"){
+  if(detailId){var s=stu.filter(function(x){return x.id==detailId})[0];
+   if(s){v.innerHTML='<div class="bar"><h2>'+esc(s.name)+'</h2><button class="btn alt" id="back">Back to list</button><button class="btn danger" id="sdel">Delete profile</button></div><div class="panel detail"><dl>'+
+   [["LRN",s.lrn],["Grade & section",s.sec],["Age",s.age],["Sex",s.sex],["Blood type",s.blood],["Height (cm)",s.h],["Weight (kg)",s.w],["Allergies",s.all],["Medical conditions",s.cond],["Emergency contact",s.ec],["Contact number",s.cn],["Notes",s.notes],["Added",fmt(s.added)]].map(function(r){return'<dt>'+r[0]+'</dt><dd>'+esc(r[1]||"-")+'</dd>'}).join("")+'</dl></div>';
+   $("#back").onclick=function(){detailId=null;render()};
+   $("#sdel").onclick=function(){if(confirm("Delete this health profile?"))api("/students/"+s.id,{method:"DELETE"}).then(function(){detailId=null;return reload()}).catch(function(e){toast(e.message)})};return}}
+  var l2=stu.filter(function(s){return (s.name+" "+s.lrn+" "+s.sec).toLowerCase().indexOf(q.toLowerCase())>-1});
+  var F=function(id,lb,t){return'<div class="field"><label>'+lb+'</label><input id="'+id+'"'+(t?' type="'+t+'"':'')+'></div>'};
+  v.innerHTML='<div class="bar"><h2>Student health profiles</h2><input class="search" id="q" placeholder="Search name, LRN, section" value="'+esc(q)+'"><a class="btn alt" href="/api/students.csv" style="text-decoration:none">Download CSV</a><button class="btn" id="add">'+(showForm?"Close":"Add student")+'</button></div>'+
+  (showForm?'<div class="panel"><div class="grid">'+F("sn","Full name")+F("sl","LRN")+F("ss","Grade & section")+F("sa","Age","number")+
+   '<div class="field"><label>Sex</label><select id="sx"><option>Female</option><option>Male</option></select></div><div class="field"><label>Blood type</label><select id="sb"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>'+
+   F("sh","Height (cm)","number")+F("sw","Weight (kg)","number")+F("sal","Allergies")+F("sc","Medical conditions")+F("se","Emergency contact person")+F("sp","Contact number")+
+   '<div class="field" style="grid-column:1/-1"><label>Notes</label><textarea id="sno" rows="2"></textarea></div></div><p><button class="btn" id="ssave">Save profile</button></p></div>':'')+
+  (l2.length?'<div class="scroll"><table class="sheetT"><tr><th>#</th><th>Date submitted</th>'+COLS.map(function(c){return'<th>'+c[1]+'</th>'}).join("")+'<th></th></tr>'+l2.map(function(s,i){return'<tr><td class="rn">'+(i+1)+'</td><td>'+fmt(s.added)+'</td>'+COLS.map(function(c){return'<td>'+esc(s[c[0]]||"")+'</td>'}).join("")+'<td><button class="btn sm alt" data-v="'+s.id+'">View</button></td></tr>'}).join("")+'</table></div>':'<div class="panel empty">No health profiles yet. Click \u201cAdd student\u201d to get started.</div>');
+  search();
+  v.querySelectorAll("[data-v]").forEach(function(b){b.onclick=function(){detailId=b.dataset.v;render()}});
+  if(showForm)$("#ssave").onclick=function(){var r=rec("s");if(!r.name){toast("Enter the student\u2019s name");return}
+   api("/students",{method:"POST",body:r}).then(function(){showForm=false;toast("Profile saved");return reload()}).catch(function(e){toast(e.message)})};
+ }
+}
+/* student self-entry form (public) */
+$("#slogo").src=$(".logo").src;
+function showStu(on){$("#sform").classList.toggle("hidden",!on);$("#login").classList.toggle("hidden",on);if(on){$("#sfbody").classList.remove("hidden");$("#sfthanks").classList.add("hidden")}}
+$("#tostu").onclick=function(){showStu(true)};
+$("#fback").onclick=function(){showStu(false)};
+$("#fmore").onclick=function(){["fn","fl","fs","fa","fh","fw","fal","fc","fe","fp","fno"].forEach(function(i){$("#"+i).value=""});showStu(true)};
+$("#fsend").onclick=function(){var r=rec("f");if(!r.name||!r.lrn){toast("Please enter your name and LRN");return}
+ api("/students",{method:"POST",body:r}).then(function(){$("#sfbody").classList.add("hidden");$("#sfthanks").classList.remove("hidden")}).catch(function(e){toast(e.message)})};
+if(location.hash==="#student")showStu(true);else api("/me").then(enter).catch(function(){});
+})();
+</script>
+
+</body>
+</html>
